@@ -1,28 +1,34 @@
 #!/usr/bin/env python3
 """
-Test API Tennis RapidAPI – debug migliorato
+Test API Tennis RapidAPI – live_scores
 """
 
 import os, json, logging, requests
 
 API_KEY = os.environ["RAPIDAPI_KEY"]
 
-# Prima prova: classifica ATP (sicuramente esistente)
-url = "https://tennis-api-atp-wta-itf.p.rapidapi.com/tennis/v2/ranking/atp/top"
+url = "https://ultimate-tennis1.p.rapidapi.com/live_scores"
 headers = {
     "X-RapidAPI-Key": API_KEY,
-    "X-RapidAPI-Host": "tennis-api-atp-wta-itf.p.rapidapi.com"
+    "X-RapidAPI-Host": "ultimate-tennis1.p.rapidapi.com"
 }
-params = {}  # senza parametri
+# Se l'endpoint richiede parametri (es. date, tournament_id), aggiungili qui
+params = {}   # modifica se necessario
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(message)s")
 try:
     resp = requests.get(url, headers=headers, params=params, timeout=15)
     logging.info(f"Status code: {resp.status_code}")
-    logging.info(f"Response text (primi 500 caratteri): {resp.text[:500]}")
+    logging.info(f"Response text (primi 1500 caratteri): {resp.text[:1500]}")
     if resp.status_code == 200:
         data = resp.json()
-        logging.info(f"Trovati {len(data)} elementi nella classifica")
+        if isinstance(data, list):
+            logging.info(f"Trovati {len(data)} eventi live")
+            # Mostra il primo evento per vedere la struttura
+            if len(data) > 0:
+                logging.info(f"Primo evento: {json.dumps(data[0], indent=2)[:1000]}")
+        else:
+            logging.info(f"Risposta (primi 1000 caratteri): {json.dumps(data)[:1000]}")
     else:
         logging.error("Richiesta fallita")
 except Exception as e:
