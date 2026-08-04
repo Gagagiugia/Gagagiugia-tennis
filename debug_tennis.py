@@ -1,25 +1,29 @@
 #!/usr/bin/env python3
 """
-Test API Tennis RapidAPI – programma giornaliero ATP
+Test API Tennis RapidAPI – debug migliorato
 """
 
 import os, json, logging, requests
 
 API_KEY = os.environ["RAPIDAPI_KEY"]
 
-# Endpoint del programma giornaliero per un torneo ATP (ID 580 è un esempio)
-# Proviamo a vedere se restituisce le partite di oggi
-url = "https://ultimate-tennis1.p.rapidapi.com/atp/tournament_daily_schedule/580"
+# Prima prova: classifica ATP (sicuramente esistente)
+url = "https://tennis-api-atp-wta-itf.p.rapidapi.com/tennis/v2/ranking/atp/top"
 headers = {
     "X-RapidAPI-Key": API_KEY,
-    "X-RapidAPI-Host": "ultimate-tennis1.p.rapidapi.com"
+    "X-RapidAPI-Host": "tennis-api-atp-wta-itf.p.rapidapi.com"
 }
-params = {"date": "2026-08-04"}   # oggi
+params = {}  # senza parametri
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(message)s")
 try:
     resp = requests.get(url, headers=headers, params=params, timeout=15)
-    data = resp.json()
-    logging.info(f"Risposta API (primi 1000 caratteri): {json.dumps(data)[:1000]}")
+    logging.info(f"Status code: {resp.status_code}")
+    logging.info(f"Response text (primi 500 caratteri): {resp.text[:500]}")
+    if resp.status_code == 200:
+        data = resp.json()
+        logging.info(f"Trovati {len(data)} elementi nella classifica")
+    else:
+        logging.error("Richiesta fallita")
 except Exception as e:
     logging.error(f"Errore: {e}")
