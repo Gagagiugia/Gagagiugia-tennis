@@ -1,10 +1,12 @@
-name: Test Tennis API
+name: Market Hunter Tennis Lunedì   # cambia per martedì/mercoledì
 
 on:
+  repository_dispatch:
+    types: [scan]
   workflow_dispatch:
 
 jobs:
-  test:
+  scan:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -13,7 +15,35 @@ jobs:
           python-version: '3.11'
       - name: Install dependencies
         run: pip install requests
-      - name: Run test
+      - name: Restore state cache
+        uses: actions/cache@v4
+        id: cache
+        with:
+          path: |
+            state.json
+            bets.json
+            bets_log.csv
+          key: tennis-${{ runner.os }}-${{ github.run_id }}
+          restore-keys: |
+            tennis-${{ runner.os }}-
+      - name: Run scanner
         env:
-          RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
-        run: python debug_tennis.py
+          API_KEY: ${{ secrets.API_KEY }}
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python market_hunter_tennis.py
+      - name: Save updated state cache
+        uses: actions/cache/save@v4
+        if: always()
+        with:
+          path: |
+            state.json
+            bets.json
+            bets_log.csv
+          key: ${{ steps.cache.outputs.cache-primary-key }}
+      - name: Upload CSV artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bets-log
+          path: bets_log.csv
