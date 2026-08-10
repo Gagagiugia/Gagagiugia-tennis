@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Market Hunter Tennis – Lunedì Edition
+Market Hunter Tennis – Lunedì Edition (finestra 17-19 UTC)
 """
 
 import os, json, csv, logging, requests, sys
@@ -24,7 +24,7 @@ def is_monitoring_window():
     now = datetime.utcnow()
     if now.weekday() != TARGET_WEEKDAY:
         return False
-    if not (12 <= now.hour <= 20):
+    if not (17 <= now.hour <= 19):
         return False
     return True
 
@@ -64,28 +64,6 @@ def fetch_events():
             return []
         data = resp.json()
         events = data.get("data", [])
-        # DEBUG: traccia gli orari delle partite di oggi
-        if events:
-            min_start = None
-            max_start = None
-            for ev in events:
-                start_str = ev.get("start_at")
-                if start_str:
-                    try:
-                        start_dt = datetime.strptime(start_str, "%Y-%m-%d %H:%M:%S.%f")
-                    except ValueError:
-                        try:
-                            start_dt = datetime.strptime(start_str, "%Y-%m-%d %H:%M:%S")
-                        except ValueError:
-                            continue
-                    if min_start is None or start_dt < min_start:
-                        min_start = start_dt
-                    if max_start is None or start_dt > max_start:
-                        max_start = start_dt
-            if min_start and max_start:
-                logging.info(f"ORARI PARTITE OGGI: dalle {min_start.strftime('%H:%M')} alle {max_start.strftime('%H:%M')} UTC")
-            else:
-                logging.info("ORARI PARTITE OGGI: nessun orario valido trovato")
         filtered = []
         for ev in events:
             tournament_name = ev.get("tournament", {}).get("name", "")
