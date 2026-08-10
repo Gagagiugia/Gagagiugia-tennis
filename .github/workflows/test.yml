@@ -1,8 +1,8 @@
-name: Market Hunter Tennis Lunedì   # cambia per martedì/mercoledì
+name: Market Hunter Tennis Lunedì
 
 on:
   repository_dispatch:
-    types: [scan]
+    types: [scan_lunedi]
   workflow_dispatch:
 
 jobs:
@@ -28,9 +28,9 @@ jobs:
             tennis-${{ runner.os }}-
       - name: Run scanner
         env:
-        RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
-        TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
-        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: python market_hunter_tennis.py
       - name: Save updated state cache
         uses: actions/cache/save@v4
