@@ -49,7 +49,7 @@ def save_json(filename, data):
 def fetch_events():
     url = "https://odds-feed.p.rapidapi.com/api/v1/events"
     headers = {
-        "x-rapidapi-key": API_KEY,
+        "x-rapidapi-key": RAPIDAPI_KEY,
         "x-rapidapi-host": "odds-feed.p.rapidapi.com"
     }
     params = {
