@@ -6,7 +6,7 @@ Market Hunter Tennis – Lunedì Edition
 import os, json, csv, logging, requests, sys
 from datetime import datetime, date, timedelta
 
-API_KEY = os.environ["API_KEY"]
+RAPIDAPI_KEY = os.environ["RAPIDAPI_KEY"]
 TELEGRAM_TOKEN = os.environ["TELEGRAM_TOKEN"]
 TELEGRAM_CHAT_ID = os.environ["TELEGRAM_CHAT_ID"]
 
