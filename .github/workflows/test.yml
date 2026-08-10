@@ -28,9 +28,9 @@ jobs:
             tennis-${{ runner.os }}-
       - name: Run scanner
         env:
-          API_KEY: ${{ secrets.API_KEY }}
-          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
+        TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: python market_hunter_tennis.py
       - name: Save updated state cache
         uses: actions/cache/save@v4
