@@ -2,7 +2,7 @@ name: Market Hunter Tennis Lunedì
 
 on:
   repository_dispatch:
-    types: [scan_lunedi]
+    types: [scan]
   workflow_dispatch:
 
 jobs:
