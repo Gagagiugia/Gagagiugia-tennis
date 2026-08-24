@@ -24,7 +24,7 @@ def is_monitoring_window():
     now = datetime.utcnow()
     if now.weekday() != 0:   # lunedì
         return False
-    if not (8 <= now.hour < 16):
+    if not (21 <= now.hour <= 23):
         return False
     return True
 
